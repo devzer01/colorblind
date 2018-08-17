@@ -1,0 +1,12 @@
+{
+    "name": "devzer01/btb",
+    "require": {
+        "slim/slim-skeleton": "^3.1"
+    },
+    "authors": [
+        {
+            "name": "Nayana Hettiarachchi",
+            "email": "nayana@corp-gems.com"
+        }
+    ]
+}

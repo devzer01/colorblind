@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, minimal-ui" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            background-color: #f5e9db;
+        }
+
+        button {
+            width: 45%;
+            background-color: aqua;
+            margin: auto;
+        }
+
+
+        h1 {
+            font-size: 4em !important;
+        }
+
+        #scoreCard {
+            font-size: 100px;
+        }
+
+        .age {
+            margin: 5px;
+        }
+
+        .overlay {
+            position: absolute;
+            background-color: whitesmoke;
+            z-index: 1;
+            opacity: 0.8;
+            width: 100%;
+            height: 100%;
+        }
+
+        .content-area {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 80%;
+            transform: translate(-50%,-50%);
+            z-index: 2;
+        }
+
+        .content-area2 {
+            position: absolute;
+            top: 70%;
+            left: 50%;
+            width: 80%;
+            transform: translate(-50%,-20%);
+            z-index: 2;
+        }
+
+        .content-area h2 {
+            font-size: 50px;
+        }
+
+        .content-area button {
+            z-index: 2;
+        }
+
+        #correct {
+            font-size: 100px;
+        }
+
+        .col-sm-12 {
+            /*width: 50%;*/
+            /*margin: auto;*/
+            /*vertical-align: middle;*/
+            /*height: 4em;*/
+            /*border: black 1px solid;*/
+            /*border-radius: 10px;*/
+            /*font-size: 3em;*/
+            background-color: white;
+        }
+
+        .bottom {
+            display: block;
+            max-width: 100%;
+            width: 100%;
+            position: absolute;
+            bottom:20px;
+            left:50%;
+            transform:translateX(-50%);
+            z-index: 0;
+        }
+        /*span {*/
+            /*margin: auto;*/
+            /*top: 5em;*/
+            /*font-size: 1em;*/
+            /*position: absolute;*/
+            /*width: 50%;*/
+            /*height: auto;*/
+        /*}*/
+
+        .blue { color: blue; }
+        .green { color: green; }
+        .yellow { color: yellow; }
+        .red { color: red; }
+        .black { color: black; }
+
+        .bgblue { background-color: white; }
+        .bggreen { background-color: white; }
+        .bgyellow { background-color: white; }
+        .bgred { background-color: white; }
+        .bgblack { background-color: white; }
+    </style>
+</head>
+<body>
+    <div id="ageGroups" class="overlay text-center" style="display: block;">
+        <h2 class="h2">Are you Color Blind?</h2>
+        <img src="/images/logo.png" />
+        <div class="content-area2">
+            <h5 class="h5">Please select your age group.</h5>
+            <button class="btn btn-primary age">below 13</button>
+            <button class="btn btn-primary age">13 - 17</button>
+            <button class="btn btn-primary age">17 - 30</button>
+            <button class="btn btn-primary age">30 - 45</button>
+            <button class="btn btn-primary age">45 - 65</button>
+            <button class="btn btn-primary age">65+</button>
+        </div>
+    </div>
+    <div id="divNumber" class="overlay text-center" style="display: none;">
+        <div class="content-area" id="scoreCard"></div>
+    </div>
+    <div class="container">
+        <div class="col-sm-11 text-right" style="height: 100px; font-size: 36px; color: white;" id="game-seconds">90</div>
+        <div class="col-sm-6 text-center shadow-lg bg-white rounded">
+            <h1 class="h1" id="first"></h1>
+        </div>
+
+        <div class="col-sm-11">&nbsp;</div>
+
+        <div class="col-sm-6 text-center shadow-lg bg-white rounded">
+            <h1 id="second" class="h1"></h1>
+        </div>
+
+
+        <div class="col-sm-10 text-center" style="height: 110px"><span id="correct"></span></div>
+        <div class="bottom text-center" style="display: none">
+            <button class="btn btn-primary btn-lg shadow-lg rounded btno" id="no">No</button>
+            <button class="btn btn-primary btn-lg shadow-lg rounded btys" id="yes">Yes</button>
+        </div>
+    </div>
+    <audio id="adcorrect">
+        <source id="sound1" src="sounds/correct.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="adbust">
+        <source id="sound2" src="sounds/bust.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="adtimeout">
+        <source id="sound3" src="sounds/timeout.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="adtick">
+        <source id="sound4" src="sounds/tick.mp3" type="audio/mpeg">
+    </audio>
+<script type="application/javascript">
+
+    var c = 3;
+    var round = 0;
+    var c4, c5;
+    var check = "\u2713";
+    var cross = "\u2718";
+    var cls = ["blue", "yellow", "red", "black"];
+    var gameseconds = 30;
+    var roundScore = 100;
+    var gametimer;
+    var age = document.getElementById("ageGroups");
+    var div = document.getElementById("divNumber");
+    var cro = document.getElementById("correct");
+    var scoreCard = document.getElementById("scoreCard");
+    <?php printf("var map = %s;", $map); ?>
+
+    var effects = {tick: "tick", correct: "correct", bust: "bust", timeout: "timeout"};
+
+    var firsttext, secondtext;
+    var score = 0;
+    var streak = 0;
+
+    function play(f, cb) {
+        var effects = document.getElementById("ad" + f);
+        effects.play();
+        if (cb !== null) {
+            effects.onended = cb.bind(effects);
+        }
+    }
+
+    function first(text, text2) {
+        document.getElementById("first").innerText = text;
+        document.getElementById("second").innerText = text2;
+        firsttext = text;
+    }
+    function secondColor(name) {
+        secondtext = name;
+        document.getElementById("second").className = cls[c] + " text-center";
+    }
+    function second(text) {
+        document.getElementById("second").innerText = text;
+    }
+    function getRandomInt(max) {
+        return Math.floor(Math.random() * Math.floor(max));
+    }
+    function color()
+    {
+        var rand = getRandomInt(100);
+        if (rand < 30) c = 0;
+        else if (rand >= 30 && rand < 45) c = 1;
+        else if (rand >= 45 && rand < 60) c = 2;
+        else if (rand >= 60 && rand < 100) c = 3;
+        return map[c];
+    }
+
+    function setup() {
+        round++;
+        var c1 = color();
+        var c2 = color();
+        var c3 = color();
+        if (getRandomInt(100) < 40 && c5 != null) {
+            c2 = c1 = c5;
+        }
+        if (getRandomInt(100) < 20 && c4 != null) {
+            c3 = c4;
+        }
+        first(c1, c2);
+        secondColor(c3);
+        c4 = c3;
+        c5 = c1;
+    }
+    function correct() {
+        streak++;
+        if (streak > 1 && streak % 10 === 0) gameseconds += 2;
+        var tmpstreak = streak;
+        if (tmpstreak > 5) tmpstreak = 5;
+        score += (roundScore * tmpstreak);
+        showHide(check, "green");
+        play(effects.correct, function () {
+            cro.style.display = "none";
+        });
+    }
+    function wrong() {
+        streak = 0;
+        --gameseconds;
+        showHide(cross, "red");
+        play(effects.bust, function () {
+            cro.style.display = "none";
+        });
+    }
+    function showHide(text, color, stay) {
+        cro.innerText = text;
+        cro.style.color = color;
+        cro.style.display = "block";
+    }
+    function overlay(text) {
+        scoreCard.innerText = text;
+        div.style.display = "block";
+        div.onclick = function () {
+          this.style.display = "none";
+        };
+    }
+
+    function countdown() {
+        age.style.display = "none";
+        div.style.display = "block";
+        scoreCard.innerText = 5;
+        gametimer = setInterval(function () {
+            var foo = parseInt(scoreCard.innerText);
+            scoreCard.innerText = --foo;
+        }, 1000);
+        play(effects.timeout, function () {
+            clearInterval(gametimer);
+            init();
+        });
+    }
+
+    function init() {
+        document.getElementById("correct").style.display = "none";
+        div.style.display = "none";
+        setup();
+        gametimer = window.setInterval(function () {
+            if (gameseconds <= 5) {
+                play(effects.tick, null);
+            }
+            if (gameseconds === 0) {
+                overlay(score);
+                return clearInterval(gametimer);
+            }
+            gameseconds--;
+            document.getElementById("game-seconds").innerText = gameseconds;
+
+        }, 1000);
+    }
+    document.getElementsByClassName("btys")[0].onclick = function (ev) {
+        if (firsttext === secondtext) {
+            correct();
+        } else {
+            wrong();
+        }
+        setup();
+    };
+    document.getElementsByClassName("btno")[0].onclick = function (ev) {
+        if (firsttext !== secondtext) {
+            correct();
+        } else {
+            wrong();
+        }
+        setup();
+    };
+    window.onload = function () {
+      var ageGroup = document.getElementsByClassName("age");
+      for (var i = 0; i < ageGroup.length; i++) {
+         if (ageGroup[i].className.indexOf("age") != -1) {
+             ageGroup[i].onclick = function () {
+                 countdown();
+             };
+         }
+      };
+    };
+</script>
+</body>
+</html>
