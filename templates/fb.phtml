@@ -1,0 +1,77 @@
+<script>
+    window.fbAsyncInit = function() {
+        FB.init({
+            appId      : '662709724090948',
+            cookie     : true,
+            xfbml      : true,
+            version    : '3.1'
+        });
+
+        FB.AppEvents.logPageView();
+
+        FB.getLoginStatus(function(response) {
+            statusChangeCallback(response);
+        });
+
+    };
+
+    (function(d, s, id){
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {return;}
+        js = d.createElement(s); js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+</script>
+
+//ca5ba3d5e17248155128633f2e78b72c
+FB.getLoginStatus(function(response) {
+statusChangeCallback(response);
+});
+//1088761305754-vs9ef46o0iijs0059ccfbu7prfcttb6o.apps.googleusercontent.com
+//Rx_eIz7dDJ3QsT-66zjb9BI_
+{
+status: 'connected',
+authResponse: {
+accessToken: '...',
+expiresIn:'...',
+signedRequest:'...',
+userID:'...'
+}
+}
+
+
+<fb:login-button
+    scope="public_profile,email"
+    onlogin="checkLoginState();">
+</fb:login-button>
+
+
+
+function checkLoginState() {
+FB.getLoginStatus(function(response) {
+statusChangeCallback(response);
+});
+}
+
+
+
+{
+"widgetUrl": "https://cognetic.io/oauth2",
+"signInSuccessUrl": "https://cognetic.io/dashboard",
+"signOutUrl": "https://cognetic.io/signout",
+"oobActionUrl": "gems@gnuzero.org",
+"apiKey": "",
+"siteName": "this site",
+"signInOptions": ["password","google","facebook"]
+}
+
+
+{
+"clientId": "1088761305754-vs9ef46o0iijs0059ccfbu7prfcttb6o.apps.googleusercontent.com",
+"projectId": "cogneticio",
+"serviceAccountEmail": "",
+"serviceAccountPrivateKeyFile": "INSERT/PATH/TO/PRIVATEKEY",
+"widgetUrl": "https://cognetic.io/oauth2",
+"cookieName": "gtoken"
+}
