@@ -11,6 +11,10 @@
     <script src="//www.gstatic.com/firebasejs/5.4.0/firebase-auth.js"></script>
     <script src="//cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.js"></script>
     <script type="text/javascript" src="/js/entrance.js"></script>
+    <script type="text/javascript" src="/js/recordWorker.js"></script>
+    <script type="text/javascript" src="/js/recorder.js"></script>
+    <script type="text/javascript" src="/js/audio.js"></script>
+
     <title>::cognetic.io::</title>
 
 </head>
@@ -31,7 +35,7 @@
 <h2>Log</h2>
 <pre id="log"></pre>
 
-<script>
+<script type="application/javascript">
     function __log(e, data) {
         log.innerHTML += "\n" + e + " " + (data || '');
     }
@@ -41,33 +45,24 @@
 
     function startUserMedia(stream) {
         var input = audio_context.createMediaStreamSource(stream);
-        __log('Media stream created.');
-
-        // Uncomment if you want the audio to feedback directly
-        //input.connect(audio_context.destination);
-        //__log('Input connected to audio context destination.');
-
+        input.connect(audio_context.destination);
         recorder = new Recorder(input);
         __log('Recorder initialised.');
     }
 
     function startRecording(button) {
         recorder.record();
-        button.disabled = true;
-        button.nextElementSibling.disabled = false;
         __log('Recording...');
     }
 
     function stopRecording(button) {
-        recorder && recorder.stop();
-        button.disabled = true;
-        button.previousElementSibling.disabled = false;
+        recorder.stop();
         __log('Stopped recording.');
 
         // create WAV download link using audio data blob
         createDownloadLink();
 
-        recorder.clear();
+        ;
     }
 
     function drawBuffer( width, height, context, data ) {
@@ -91,7 +86,7 @@
 
 
     function createDownloadLink() {
-        recorder && recorder.exportWAV(function(blob) {
+        recorder.exportMonoWAV(function (blob) {
 
             var fd = new FormData();
             fd.append('fname', 'test.wav');
@@ -106,31 +101,22 @@
                 console.log(data);
             });
 
-        });
+        }, 'pcm');
     }
 
     window.onload = function init() {
         try {
             // webkit shim
             window.AudioContext = window.AudioContext || window.webkitAudioContext;
-            startUserMedia();
-            navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
             window.URL = window.URL || window.webkitURL;
-
             audio_context = new AudioContext;
-            __log('Audio context set up.');
-            __log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
+            navigator.mediaDevices.getUserMedia({audio: true, video: false}).then(startUserMedia);
         } catch (e) {
             alert('No web audio support in this browser!');
         }
-
-        navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
-            __log('No live audio input: ' + e);
-        });
     };
 </script>
-<script type="text/javascript" src="/js/recorder.js"></script>
-<script type="text/javascript" src="/js/audio.js"></script>
+
 <div id="viz">
     <canvas id="analyser" width="1024" height="500"></canvas>
     <canvas id="wavedisplay" width="1024" height="500"></canvas>

@@ -9,6 +9,8 @@ if (PHP_SAPI == 'cli-server') {
     }
 }
 
+putenv("GOOGLE_APPLICATION_CREDENTIALS=/var/www/html/cognetic.io/src/api.json");
+
 require __DIR__ . '/../vendor/autoload.php';
 
 session_start();

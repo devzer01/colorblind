@@ -15,17 +15,13 @@ $app->post("/audio", function (Request $request, Response $response, array $args
 
 
 
-    $blob = $request->getUploadedFiles()[0];
+    $blob = $request->getUploadedFiles();
 
 
-    $json = json_decode(file_get_contents("api.json"));
-
-    # Your Google Cloud Platform project ID
-    $projectId = 'cogneticio';
 
     # Instantiates a client
     $speech = new SpeechClient([
-        'projectId' => $json['projectId'],
+        'projectId' => 'cogneticio',
         'languageCode' => 'th-TH',
     ]);
 
@@ -37,12 +33,13 @@ $app->post("/audio", function (Request $request, Response $response, array $args
     ];
 
     # Detects speech in the audio file
-    $results = $speech->recognize($blob->stream, $options);
+    $results = $speech->recognize($blob['data']->getStream());
 
-    return $response->withJson($results);
-//    foreach ($results as $result) {
-//        echo 'Transcription: ' . $result->alternatives()[0]['transcript'] . PHP_EOL;
-//    }
+    $txt = [];
+    foreach ($results as $result) {
+        $txt[] = $result->alternatives()[0]['transcript'];
+    }
+    return $response->withJson($txt);
 });
 
 $app->get("/score/[{id}]", function (Request $request, Response $response, array $args) {
