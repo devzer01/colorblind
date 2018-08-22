@@ -52,7 +52,7 @@
     }
 
     function startRecording(button) {
-        recorder && recorder.record();
+        recorder.record();
         button.disabled = true;
         button.nextElementSibling.disabled = false;
         __log('Recording...');
@@ -69,6 +69,26 @@
 
         recorder.clear();
     }
+
+    function drawBuffer( width, height, context, data ) {
+        var step = Math.ceil( data.length / width );
+        var amp = height / 2;
+        context.fillStyle = "silver";
+        context.clearRect(0,0,width,height);
+        for(var i=0; i < width; i++){
+            var min = 1.0;
+            var max = -1.0;
+            for (j=0; j<step; j++) {
+                var datum = data[(i*step)+j];
+                if (datum < min)
+                    min = datum;
+                if (datum > max)
+                    max = datum;
+            }
+            context.fillRect(i,(1+min)*amp,1,Math.max(1,(max-min)*amp));
+        }
+    }
+
 
     function createDownloadLink() {
         recorder && recorder.exportWAV(function(blob) {
@@ -93,6 +113,7 @@
         try {
             // webkit shim
             window.AudioContext = window.AudioContext || window.webkitAudioContext;
+            startUserMedia();
             navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
             window.URL = window.URL || window.webkitURL;
 
@@ -108,8 +129,15 @@
         });
     };
 </script>
-
-<script src="/js/recorder.js"></script>
-
+<script type="text/javascript" src="/js/recorder.js"></script>
+<script type="text/javascript" src="/js/audio.js"></script>
+<div id="viz">
+    <canvas id="analyser" width="1024" height="500"></canvas>
+    <canvas id="wavedisplay" width="1024" height="500"></canvas>
+</div>
+<div id="controls">
+    <img id="record" src="img/mic128.png" onclick="toggleRecording(this);">
+    <a id="save" href="#"><img src="img/save.svg"></a>
+</div>
 </body>
 </html>
