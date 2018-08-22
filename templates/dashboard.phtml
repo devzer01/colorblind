@@ -98,7 +98,7 @@
                 processData: false,
                 contentType: false
             }).done(function(data) {
-                console.log(data);
+                document.getElementById("fooba").innerText = JSON.stringify(data);
             });
 
         }, 'pcm');
@@ -121,6 +121,7 @@
     <canvas id="analyser" width="1024" height="500"></canvas>
     <canvas id="wavedisplay" width="1024" height="500"></canvas>
 </div>
+<span id="fooba"></span>
 <div id="controls">
     <img id="record" src="img/mic128.png" onclick="toggleRecording(this);">
     <a id="save" href="#"><img src="img/save.svg"></a>
