@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "cogneticio",
+  "private_key_id": "4eb567e4d2dc5d8ff3408ea86eb0f283ecf46eae",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDX/JX0ynJGTwdH\nA0VJ2Yc50fU58RlZLIzDvAMc55igR0ltoHpKaeWZqmxzlvS9BJQByDmit8+GG0TG\nlobCh7xPKO/xnnKg7xjXBUtvrk1tX6fFCosiR7bhlvSkm2WpgjU3k4H0ebpGBDNr\n7+iatg12yjoiTkiLvHc53L8dof1RrWNUnEvexctQzn20be/fFjtKT0w5wkIZHFai\nEEJTFZuruKrxBBjsjbgrlLpT8UpLPc+SL0qcGMfXxSDrXyH1NvsNTXrriyb0t8yy\ndl/u2xQ56RsOrww+xbrsKv7reTvMLsHsaWS5KZHPiZGavy9DsOxpsr+oKdTIZaH6\n6IavNkx3AgMBAAECggEAaxXbj3O0NrHGDOpNNzE3v24epGyqQbE51W3pKTKWVJkj\nicvv9ecNJCQAA0tL6k9TxpJsKQXzSS1J6yAEjnxX2/OTC3ugn7QL38fLQALudpTf\njG0O0J83yB9dCiPVwrZBBl4HJ5wWw9IfYJug+tvaTxQywIGJrGZzwmd1Bg8jlpN0\nj7NfXtrAsa74Vfci4P72KGw4jz4vTYPJWtalyfMudL+R7YrMiX5jUm/AVa39Cwrw\nrWPUnPaeR2VsIbHCpcTAdsm33UzPXuxDMu6WckSbwkUT7SII37GHLwSY+YCbLC6Z\nXQHWDGt9FD44yoBD5aQtRF5TDVRg2OaRvVoCJAGwAQKBgQDyKi6kLWoa1FtpBNQZ\nP+Ke8nHBgqChi3DZDHpaIMTgXOgRVwh52O1dg6pYfmheS/9hZYk0OqJ5Eg1KLkeT\naCg1203lCp96trnCNh7TOg02IGTeNargVKEQjHsIgTavX5+H5kRxW74heDJiKY9I\nsca/BY/Zq2Ia+R4p94oTTJeoAQKBgQDkU4gYWvPOM2rY9WjfvITqt3ozUnHRv/de\n3lg4aXVC+m9DH/gHMr1ZUWRYUjwvsJ2JD8D+LeEFjmOQoDnBVx4VobtFztuEMHm7\n/U8Nsjg0gWW+8holHBEeoFtWnsAo8UDEXiejBk0yXrx4+7116A0WlAiesEqIfMFW\nj6hbLpc0dwKBgEpeBeDJSZJfsIq5vuDaK6AgWCrTEL1LcyZUnKZc9djo7yOUFLhG\nk+5p5sAyYZ7Du/OPGOl/MDH6BzbGq5hrHh4b8PnrnzoyLy2jLSg05aW/oPpUhNtL\nYgMRAR+FfuOwe+9iGZauU983aFGY7bWnUp+K97gi14ftBQRiTnbKyLABAoGAHxcw\nxQA9iqp9tiVUroKhJsTtIufrD8CwEn78TFIv4Xrwg5dq0rAaEHuAynYINAY8rVkz\n0mi052jILf1jX+xY8GEhexP72Dgxm2OWzCqkdKHaFPIqlTsJKb50MYtUZz7SruqT\nQyOsh1tXFrJQzilW/ugRdGpU+9jhCsRtDF1/wWkCgYBR816LIiV2WqW5rmEQOdqj\nIcF7+PrJhObBfXx5HrwAOVqzV5tNgUiTx74GPhf6nknojq8a3J+LkfhiEW2O757V\nUe5OQnAfQ/2FlBxXZNejmcS2EjTWz7A42VGxZ2cCY+nYnyCpkSRL+393CgQVgWus\n7BipNdHFUQ8XkPlddnkO2Q==\n-----END PRIVATE KEY-----\n",
+  "client_email": "cognetic@cogneticio.iam.gserviceaccount.com",
+  "client_id": "112085141720964146855",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/cognetic%40cogneticio.iam.gserviceaccount.com"
+}
