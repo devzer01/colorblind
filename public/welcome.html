@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, minimal-ui" />
+  <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <meta charset="UTF-8">
+  <link type="text/css" rel="stylesheet" href="//cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.css" />
+  <script src="//www.gstatic.com/firebasejs/5.4.0/firebase-app.js"></script>
+  <script src="//www.gstatic.com/firebasejs/5.4.0/firebase-auth.js"></script>
+  <script src="//www.gstatic.com/firebasejs/5.4.0/firebase-firestore.js"></script>
+  <script src="//cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.js"></script>
+  <title>cognetic.io</title>
+  <style>
+    body {
+      background-color: #f5e9db;
+    }
+
+    button {
+      width: 45%;
+      background-color: aqua;
+      margin: auto;
+    }
+
+
+    h1 {
+      font-size: 4em !important;
+    }
+
+    #scoreCard, #countRemain {
+      font-size: 100px;
+      line-height: 100px;
+    }
+
+    .age {
+      margin: 5px;
+    }
+
+    .overlay {
+      position: absolute;
+      background-color: whitesmoke;
+      z-index: 1;
+      opacity: 0.93;
+      width: 100%;
+      height: 100%;
+    }
+
+    .content-area {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 85%;
+      transform: translate(-50%, 30%);
+      z-index: 2;
+    }
+
+    .content-area2 {
+      position: absolute;
+      top: 70%;
+      left: 50%;
+      width: 80%;
+      transform: translate(-50%,-20%);
+      z-index: 2;
+    }
+
+    .content-area h2 {
+      font-size: 50px;
+    }
+
+    .content-area button {
+      z-index: 2;
+    }
+
+    #correct {
+      font-size: 100px;
+    }
+
+    .col-sm-12 {
+      /*width: 50%;*/
+      /*margin: auto;*/
+      /*vertical-align: middle;*/
+      /*height: 4em;*/
+      /*border: black 1px solid;*/
+      /*border-radius: 10px;*/
+      /*font-size: 3em;*/
+      background-color: white;
+    }
+
+    .bottom {
+      display: block;
+      max-width: 100%;
+      width: 100%;
+      position: absolute;
+      bottom:20px;
+      left:50%;
+      transform:translateX(-50%);
+      z-index: 0;
+    }
+
+    .bottom2 {
+      /*display: block;*/
+      /*max-width: 100%;*/
+      /*width: 100%;*/
+      /*position: absolute;*/
+      /*bottom: 0;*/
+      /*left:50%;*/
+      /*transform:translateX(-50%);*/
+      /*z-index: 0;*/
+
+      display: inline-flex;
+      max-width: 100%;
+      width: 100%;
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      /* height: 10%; */
+      vertical-align: bottom;
+      margin-bottom: 0px;
+      padding-bottom: 0px;
+    }
+    /*span {*/
+    /*margin: auto;*/
+    /*top: 5em;*/
+    /*font-size: 1em;*/
+    /*position: absolute;*/
+    /*width: 50%;*/
+    /*height: auto;*/
+    /*}*/
+    .lst {
+      display: none;
+    }
+
+    .firebaseui-card-content {
+      height: 500px;
+    }
+
+    .blue { color: blue; }
+    .green { color: green; }
+    .yellow { color: yellow; }
+    .red { color: red; }
+    .black { color: black; }
+
+    .bgblue { background-color: white; }
+    .bggreen { background-color: white; }
+    .bgyellow { background-color: white; }
+    .bgred { background-color: white; }
+    .bgblack { background-color: white; }
+
+    #divNumber {
+      background-image: url(/images/celebrate.png);
+      background-repeat-y: no-repeat;
+      background-blend-mode: darken;
+    }
+
+    .pulse {
+      background-color: black;
+    }
+
+  </style>
+  <script type="text/javascript">
+      var cls = ["black", "red", "blue", "yellow"];
+      var db = null; var map = []; var groupId = null;
+      var stats = { time: [], outcome: [] };
+
+      function avg(acl, v) {
+          return (acl + v.score) / 2;
+      }
+
+      function getStats() {
+          var user = {id: firebase.auth().currentUser.uid};
+          //var scores = db.collection("entrance").getAll(); //.doc(user.uid);
+         // console.log(scores);
+      }
+
+      window.addEventListener('load', function() {
+
+          // Initialize Firebase
+          var config = {
+              apiKey: "AIzaSyBd855hO36BuuAXfQcudIM0qXV9X8EIbII",
+              authDomain: "cogneticio.firebaseapp.com",
+              databaseURL: "https://cogneticio.firebaseio.com",
+              projectId: "cogneticio",
+              storageBucket: "cogneticio.appspot.com",
+              messagingSenderId: "1088761305754"
+          };
+          firebase.initializeApp(config);
+
+          var uiConfig = {
+              callbacks: {
+                  signInFailure: function(error) {
+                      // For merge conflicts, the error.code will be
+                      // 'firebaseui/anonymous-upgrade-merge-conflict'.
+                      if (error.code != 'firebaseui/anonymous-upgrade-merge-conflict') {
+                          return Promise.resolve();
+                      }
+                      // The credential the user tried to sign in with.
+                      var cred = error.credential;
+                      // Copy data from anonymous user to permanent user and delete anonymous
+                      // user.
+                      // ...
+                      // Finish sign-in after data is copied.
+                      return firebase.auth().signInWithCredential(cred);
+                  },
+                  signInSuccessWithAuthResult: function(result, redirectUrl) {
+                      // var credential = result.credential;
+                      // var user = result.user;
+                      //var credential = firebase.auth.GoogleAuthProvider.credential(googleUser.getAuthResponse().id_token);
+                      //return firebase.auth().signInWithCredential(cred);
+                      return false;
+                  }
+              },
+              // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
+              signInFlow: 'popup',
+              //autoUpgradeAnonymousUsers: true,
+              'signInOptions': [
+                  {
+                      provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+                      authMethod: 'https://accounts.google.com/',
+                      clientId: "1088761305754-vs9ef46o0iijs0059ccfbu7prfcttb6o.apps.googleusercontent.com"
+                  },
+                  {
+                      provider: firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+                      scopes :[
+                          'public_profile',
+                          'email'
+                      ]
+                  }
+              ],
+              'tosUrl': 'https://www.google.com',
+              'privacyPolicyUrl': 'https://www.google.com'
+          };
+
+          var ui = new firebaseui.auth.AuthUI(firebase.auth());
+          firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
+
+
+          var handleSignedInUser = function(user) {
+              if (user.isAnonymous) {
+                  return location.href = "/index.html";
+              }
+              document.getElementById("displayName").innerText = user.displayName.split(" ")[0];
+              document.getElementById("photoURL").src = user.photoURL;
+              console.log(user);
+
+              db = firebase.firestore();
+              db.settings({timestampsInSnapshots: true});
+
+              firebase.firestore().enablePersistence()
+                  .catch(function(err) {
+                      if (err.code == 'failed-precondition') {
+                          console.log('xxx');
+                      } else if (err.code == 'unimplemented') {
+                          console.log('xxx1');
+                      }
+                  });
+
+              var docRef = db.collection("entrance").doc(user.uid);
+              db.collection("entrance").get().then(function(f) {
+                  var _data = f.docs.map(function (v) { return v.data(); } );
+                  var _own = _data.filter(function (v) { return v.id === user.uid; });
+                  var _group = _data.filter(function (v) { return v.group === _own.group; });
+                  var avgGroup = _group.reduce(avg, 0);
+                  var avgAll = _data.reduce(avg, 0);
+                  //console.log(f.docs[0].data());
+
+                  document.getElementById("results").innerText = "The average group score is " + avgGroup;
+                  document.getElementById("results").innerText += " the average overall score is " + avgAll + " you are doing " + ((_own.score > avgGroup) ? "better" : "worse") + " then the group";
+
+              });
+              var doc = docRef.get().then(function (doc) {
+                  console.log(doc.data());
+              });
+
+
+              // document.getElementById('user-signed-in').style.display = 'block';
+              // document.getElementById('user-signed-out').style.display = 'none';
+              // document.getElementById('name').textContent = user.displayName;
+              // document.getElementById('email').textContent = user.email;
+              // document.getElementById('phone').textContent = user.phoneNumber;
+              // if (user.photoURL){
+              //     var photoURL = user.photoURL;
+              //     // Append size to the photo URL for Google hosted images to avoid requesting
+              //     // the image with its original resolution (using more bandwidth than needed)
+              //     // when it is going to be presented in smaller size.
+              //     if ((photoURL.indexOf('googleusercontent.com') != -1) ||
+              //         (photoURL.indexOf('ggpht.com') != -1)) {
+              //         photoURL = photoURL + '?sz=' +
+              //             document.getElementById('photo').clientHeight;
+              //     }
+              //     // document.getElementById('photo').src = photoURL;
+              //     // document.getElementById('photo').style.display = 'block';
+              // } else {
+              //     document.getElementById('photo').style.display = 'none';
+              // }
+              console.log(user);
+              getStats();
+          };
+
+          var handleSignedOutUser = function() {
+              // document.getElementById('user-signed-in').style.display = 'none';
+              // document.getElementById('user-signed-out').style.display = 'block';
+              ui.start('#ageGroups', uiConfig);
+          };
+
+            // Listen to change in auth state so it displays the correct UI for when
+            // the user is signed in or not.
+          firebase.auth().onAuthStateChanged(function(user) {
+              // document.getElementById('loading').style.display = 'none';
+              // document.getElementById('loaded').style.display = 'block';
+              user ? handleSignedInUser(user) : handleSignedOutUser();
+          });
+
+          document.getElementById("playAgain").onclick = function () {
+            window.location.href = "https://enter.cognetic.io/"
+          };
+
+      });
+  </script>
+</head>
+
+<body>
+<div id="ageGroups" class="overlay text-center" style="padding-top: 30px; top: 0;">
+  <h2 class="h2" id="displayName">Nayana!</h2>
+  <img id="photoURL" src="">
+  <div id=results class="content-area2">
+    Work =
+    Math =
+
+
+
+
+
+
+  </div>
+  <button id="playAgain" class="btn btn-primary">Play Again</button>
+</div>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<div id="divNumber" class="overlay text-center" style="display: block; padding-top: 20px;">
+
+  <div class="content-area" style="/* top: 45%; */">
+<h2 class="h2 text-center col-sm-12" style="font-size: 50px; color: green;background-color: transparent;">GOAL</h2>
+    <div id="scoreCard">100</div>
+    <div id="remark" style="font-size: 12px;"> (see below for in-depth details)</div>
+
+    <!--<h3 class="h3 text-left">Member zone</h3>-->
+    <!--<div style="height: 5px;">&nbsp;</div>-->
+
+    <!--<div class="col-sm-12 text-left" style="width: 100%;margin: 5px 0px 5px 0px;font-size: 14px;z-index: 2;background-color: transparent;">-->
+      <!-- - secret member only entertainment<br>-->
+      <!-- - more fun activities<br>-->
+      <!-- - compare results with friends and family <br>-->
+    <!--</div>-->
+  </div>
+
+  <div id="firebaseui-auth-container" class="content-area" style="transform: translate(-50%, 30%);/* bottom: -20%; */z-index: 2;/* top: 50%; */">
+<hr>
+    <h3 class="h3 text-left">Member zone</h3>
+      <div class="control-group" style="
+    margin: 5px 0px;
+">
+        <div class="controls" style="
+    width: 100%;
+">
+          <input type="text" id="txtUsername" name="username" placeholder="Username" class="input-large" style="
+    width: 100%;
+    padding: 5px 5px;
+    border: 1px solid black;
+    margin: 10px 0;
+">
+        </div>
+        <div class="controls" style="
+    width: 100%;
+">
+          <input type="password" id="txtPassword" name="password" placeholder="Password" class="input-large" style="
+    width: 100%;
+    padding: 5px 5px;
+    border: 1px solid black;
+">
+        </div>
+      </div>
+      <div class="control-group" style="
+    width: 100%;
+    margin: 5px;
+">
+        <!-- Button -->
+
+      </div>
+  <div class="firebaseui-container firebaseui-page-provider-sign-in firebaseui-id-page-provider-sign-in">
+<div class="firebaseui-card-content"><form onsubmit="return false;"><ul class="firebaseui-idp-list"><li class="firebaseui-list-item"><button class="firebaseui-idp-button mdl-button mdl-js-button mdl-button--raised firebaseui-idp-google firebaseui-id-idp-button" data-provider-id="google.com" data-upgraded=",MaterialButton"><span class="firebaseui-idp-icon-wrapper"><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"></span><span class="firebaseui-idp-text firebaseui-idp-text-long">Sign in with Google</span><span class="firebaseui-idp-text firebaseui-idp-text-short">Google</span></button></li><li class="firebaseui-list-item"><button class="firebaseui-idp-button mdl-button mdl-js-button mdl-button--raised firebaseui-idp-facebook firebaseui-id-idp-button" data-provider-id="facebook.com" data-upgraded=",MaterialButton"><span class="firebaseui-idp-icon-wrapper"><img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/facebook.svg"></span><span class="firebaseui-idp-text firebaseui-idp-text-long">Sign in with Facebook</span><span class="firebaseui-idp-text firebaseui-idp-text-short">Facebook</span></button></li></ul></form></div><div class="firebaseui-card-footer firebaseui-provider-sign-in-footer"><p class="firebaseui-tos firebaseui-tospp-full-message">By continuing, you are indicating that you accept our <a href="https://www.google.com" class="firebaseui-link firebaseui-tos-link" target="_blank">Terms of Service</a> and <a href="https://www.google.com" class="firebaseui-link firebaseui-pp-link" target="_blank">Privacy Policy</a>.</p></div></div></div>
+  <div class="bottom2 col-sm-12 text-center" style="font-size: 10px">GESIT - A Gems production. State of Cognition is a registered trademark of GESIT</div>
+</div>
