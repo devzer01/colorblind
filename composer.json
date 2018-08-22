@@ -1,7 +1,9 @@
 {
     "name": "devzer01/btb",
     "require": {
-        "slim/slim-skeleton": "^3.1"
+        "slim/slim-skeleton": "^3.1",
+        "relaxedws/couchdb": "^1.0",
+        "google/cloud-speech": "^0.16.1"
     },
     "authors": [
         {

@@ -113,16 +113,16 @@ function countdown() {
 
 function savestats() {
     var user = {id: firebase.auth().currentUser.uid};
-    var docRef = db.collection("entrance").doc(user.id);
-    docRef.get().then(function (doc) {
-        var d = doc.data();
-        if (d === undefined) {
-            user['groupId'] = groupId;
-            user['score'] = score;
-            user['scores'] = [score]
-            user['rounds'] = stats.outcome.length;
-            user['roundss'] = [stats.outcome.length];
-            user['maxStreak'] = stats.outcome.reduce(function (acl, va) {
+
+    $.get("/score/" + user.id, function(d) {
+        if (d.empty) {
+            d['id'] = user.id;
+            d['groupId'] = groupId;
+            d['score'] = score;
+            d['scores'] = [score];
+            d['rounds'] = stats.outcome.length;
+            d['roundss'] = [stats.outcome.length];
+            d['maxStreak'] = stats.outcome.reduce(function (acl, va) {
                 if (va === 1) {
                     acl[0]++;
                 } else {
@@ -133,15 +133,13 @@ function savestats() {
                 }
                 return acl;
             }, [0,0]).pop();
-            user['avgTime'] = stats.time.map(function (k, v, a) {
+            d['avgTime'] = stats.time.map(function (k, v, a) {
                 if (k === 0) return gameSeconds * precision;
                 return a[k - 1] - v;
             }).reduce(function (acl, v) { return (acl + v) / 2; }, 0);
 
-            docRef.set(user).then(redirect).catch(function (e) {
-
-            })
         } else {
+
             d.score = score;
             d.scores.push(score);
             d.rounds = stats.outcome.length;
@@ -157,8 +155,11 @@ function savestats() {
                 }
                 return acl;
             }, [0,0]).pop();
-            docRef.update(d).then(redirect).catch(function (e) { console.log(e); });
         }
+
+        $.post("/score", d, function (data) {
+            console.log(data);
+        });
     });
 }
 
@@ -284,7 +285,7 @@ var handleSignedInUser = function(user) {
     //     document.getElementById('photo').style.display = 'none';
     // }
     console.log(user);
-
+    return user;
 };
 
 
@@ -292,8 +293,6 @@ var handleSignedInUser = function(user) {
  * Displays the UI for a signed out user.
  */
 var handleSignedOutUser = function() {
-    // document.getElementById('user-signed-in').style.display = 'none';
-    // document.getElementById('user-signed-out').style.display = 'block';
     ui.start('#firebaseui-auth-container', uiConfig);
 };
 
@@ -302,164 +301,127 @@ var cls = ["black", "red", "blue", "yellow"];
 var db = null; var map = []; var groupId = null;
 var stats = { time: [], outcome: [] };
 
+// Initialize Firebase
+var config = {
+    apiKey: "AIzaSyBd855hO36BuuAXfQcudIM0qXV9X8EIbII",
+    authDomain: "cogneticio.firebaseapp.com",
+    databaseURL: "https://cogneticio.firebaseio.com",
+    projectId: "cogneticio",
+    storageBucket: "cogneticio.appspot.com",
+    messagingSenderId: "1088761305754"
+};
 
-window.addEventListener('load', function() {
-
-    initListeners();
-
-    // Initialize Firebase
-    var config = {
-        apiKey: "AIzaSyBd855hO36BuuAXfQcudIM0qXV9X8EIbII",
-        authDomain: "cogneticio.firebaseapp.com",
-        databaseURL: "https://cogneticio.firebaseio.com",
-        projectId: "cogneticio",
-        storageBucket: "cogneticio.appspot.com",
-        messagingSenderId: "1088761305754"
-    };
-    firebase.initializeApp(config);
-
-    uiConfig = {
-        callbacks: {
-            signInFailure: function(error) {
-                // For merge conflicts, the error.code will be
-                // 'firebaseui/anonymous-upgrade-merge-conflict'.
-                if (error.code != 'firebaseui/anonymous-upgrade-merge-conflict') {
-                    return Promise.resolve();
-                }
-                // The credential the user tried to sign in with.
-                var cred = error.credential;
-                // Copy data from anonymous user to permanent user and delete anonymous
-                // user.
-                // ...
-                // Finish sign-in after data is copied.
-                return firebase.auth().signInWithCredential(cred);
-            },
-            signInSuccessWithAuthResult: function(result, redirectUrl) {
-                firebase.auth().currentUser.linkAndRetrieveDataWithCredential(result.credential).then(function(usercred) {
+uiConfig = {
+    callbacks: {
+        signInFailure: function(error) {
+            if (error.code !== 'firebaseui/anonymous-upgrade-merge-conflict') {
+                return Promise.resolve();
+            }
+            // The credential the user tried to sign in with.
+            var cred = error.credential;
+            // Copy data from anonymous user to permanent user and delete anonymous
+            // user.
+            // ...
+            // Finish sign-in after data is copied.
+            return firebase.auth().signInWithCredential(cred);
+        },
+        signInSuccessWithAuthResult: function(result, redirectUrl) {
+            var cu = firebase.auth().currentUser;
+            if (cu.isAnonymouse) {
+                cu.linkAndRetrieveDataWithCredential(result.credential).then(function (usercred) {
                     var user = usercred.user;
                     console.log("Anonymous account successfully upgraded", user);
-                }, function(error) {
+                }, function (error) {
                     console.log("Error upgrading anonymous account", error);
                 });
-
-                // var credential = result.credential;
-                // var user = result.user;
-                //var credential = firebase.auth.GoogleAuthProvider.credential(googleUser.getAuthResponse().id_token);
-                //return firebase.auth().signInWithCredential(cred);
-                return true;
             }
+
+            // var credential = result.credential;
+            // var user = result.user;
+            //var credential = firebase.auth.GoogleAuthProvider.credential(googleUser.getAuthResponse().id_token);
+            //return firebase.auth().signInWithCredential(cred);
+            return false;
+        }
+    },
+    // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
+    signInFlow: 'popup',
+    //autoUpgradeAnonymousUsers: true,
+    signInSuccessUrl: '//enter.cognetic.io/',
+    'signInOptions': [
+        {
+            provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+            // Required to enable this provider in One-Tap Sign-up.
+            authMethod: 'https://accounts.google.com/',
+            // Required to enable ID token credentials for this provider.
+            clientId: "1088761305754-vs9ef46o0iijs0059ccfbu7prfcttb6o.apps.googleusercontent.com"
         },
-        // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
-        signInFlow: 'popup',
-        //autoUpgradeAnonymousUsers: true,
-        signInSuccessUrl: 'https://enter.cognetic.io/welcome.html',
-        'signInOptions': [
-            {
-                provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-                // Required to enable this provider in One-Tap Sign-up.
-                authMethod: 'https://accounts.google.com/',
-                // Required to enable ID token credentials for this provider.
-                clientId: "1088761305754-vs9ef46o0iijs0059ccfbu7prfcttb6o.apps.googleusercontent.com"
-            },
-            {
-                provider: firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-                scopes :[
-                    'public_profile',
-                    'email'
-                ]
-            }
-        ],
-        // Terms of service url.
-        'tosUrl': 'https://www.google.com',
-        // Privacy policy url.
-        'privacyPolicyUrl': 'https://www.google.com',
-        'credentialHelper': firebaseui.auth.CredentialHelper.ACCOUNT_CHOOSER_COM
-    };
+        {
+            provider: firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+            scopes :[
+                'public_profile',
+                'email'
+            ]
+        }
+    ],
+    // Terms of service url.
+    'tosUrl': 'https://www.google.com',
+    // Privacy policy url.
+    'privacyPolicyUrl': 'https://www.google.com',
+    'credentialHelper': firebaseui.auth.CredentialHelper.ACCOUNT_CHOOSER_COM
+};
 
+var signInWithPopup = function() {
+    window.open(getWidgetUrl(), 'Sign In', 'width=985,height=735');
+};
+
+var setAgeGroup = function() {
+    groupId = $(this).data('group');
+    setCookie("v2groupId", groupId, 365);
+    countdown();
+};
+
+var signInWithRedirect = function() {
+    window.location.assign(getWidgetUrl());
+};
+
+var initAuth = function() {
     ui = new firebaseui.auth.AuthUI(firebase.auth());
-    //ui.signIn();
     ui.disableAutoSignIn();
 
-    var signInWithRedirect = function() {
-        window.location.assign(getWidgetUrl());
-    };
     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
-    firebase.auth().signInWithCredential(firebase.auth.Auth.Persistence.SESSION.)
-
-    // // The client SDK will parse the code from the link for you.
-    // firebase.auth().signInWithEmailLink(email, window.location.href)
-    //     .then(function(result) {
-    //         // Clear email from storage.
-    //         window.localStorage.removeItem('emailForSignIn');
-    //         // You can access the new user via result.user
-    //         // Additional user info profile not available via:
-    //         // result.additionalUserInfo.profile == null
-    //         // You can check if the user is new or existing:
-    //         // result.additionalUserInfo.isNewUser
-    //     })
-    //     .catch(function(error) {
-    //         // Some error occurred, you can inspect the code: error.code
-    //         // Common errors could be invalid email and invalid or expired OTPs.
-    //     });
-
-
-
-    // Listen to change in auth state so it displays the correct UI for when
-    // the user is signed in or not.
-    firebase.auth().onAuthStateChanged(function(user) {
-        // document.getElementById('loading').style.display = 'none';
-        // document.getElementById('loaded').style.display = 'block';
+    firebase.auth().onAuthStateChanged(function (user) {
         user ? handleSignedInUser(user) : handleSignedOutUser();
     });
+}
 
-    /**
-     /**
-     * Open a popup with the FirebaseUI widget.
-     */
-    var signInWithPopup = function() {
-        window.open(getWidgetUrl(), 'Sign In', 'width=985,height=735');
-    };
-
+var authUiReset = function() {
     ui.reset();
     ui.start('#firebaseui-auth-container', uiConfig);
-    db = firebase.firestore();
-    db.settings({timestampsInSnapshots: true});
+};
 
-    firebase.firestore().enablePersistence()
-        .catch(function(err) {
-            if (err.code == 'failed-precondition') {
-                console.log('xxx');
-            } else if (err.code == 'unimplemented') {
-                console.log('xxx1');
-            }
-        });
-    var docRef = db.collection("colors").doc("master");
+var initDb = function() {
+
     var ref = location.hash;
     if (ref === undefined || ref === null || ref.trim() === "") {
         ref = "#en";
     }
-    docRef.get().then(function(doc) {
-        if (doc.exists) {
-            map = doc.data()[ref.replace("#", "")];
-        } else {
-            // doc.data() will be undefined in this case
-            map = cls; //fail safe
-        }
-    }).catch(function(error) {
-        map = cls; //fail safe
+
+    var lang = ref.replace("#", "");
+
+    $.get("/colors", function (data) {
+        map = data.colors[lang];
     });
+};
 
-    var currentUser = firebase.auth().currentUser;
-    var ageGroups = document.getElementsByClassName("age");
-    for (var i = 0; i < ageGroups.length; i++) {
-        if (ageGroups[i].className.indexOf("age") !== -1) {
-            ageGroups[i].onclick = function (e) {
-                groupId = this.dataset.group;
-                setCookie("v2groupId", groupId, 365);
-                countdown();
-            };
-        }
-    };
 
-    checkCookie();
-});
+/ success callback when requesting audio input stream
+function gotStream(stream) {
+    window.AudioContext = window.AudioContext || window.webkitAudioContext;
+    var audioContext = new AudioContext();
+
+    // Create an AudioNode from the stream.
+    var mediaStreamSource = audioContext.createMediaStreamSource( stream );
+
+    // Connect it to the destination to hear yourself (or any other node for processing!)
+    mediaStreamSource.connect( audioContext.destination );
+}
