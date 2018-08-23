@@ -14,7 +14,7 @@ $app->get("/concept", function (Request $request, Response $response, array $arg
 
     $key = "AIzaSyB9vGT8ZLx2xlJ_pcZmXqRoO2lGcGd25DU";
     $cxv = "%20007681948213644044031:tswqn5l0jju";
-    $json = file_get_contents("https://www.googleapis.com/customsearch/v1?key=$key&cx=$cxv&q=" . $request->getParam('w'));
+    $json = file_get_contents("https://www.googleapis.com/customsearch/v1?searchtype=image&key=$key&cx=$cxv&q=" . $request->getParam('w'));
     return $response->withJson(json_decode($json));
 });
 
