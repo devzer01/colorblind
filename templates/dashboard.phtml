@@ -80,7 +80,12 @@
             }).done(function(data) {
                 for (var x =0; x < data.length; x++) {
                     $.get("/concept?w=" + data[x], function (d) {
-                        document.getElementById("fooba").innerText += JSON.stringify(d);
+                           for (var zx =0; zx < d.length; zx++) {
+			  	var i = document.createElement("img");
+ 				i.src = d[zx];
+				document.getElementById('xx').appendChild(i);
+			}
+			//document.getElementById("fooba").innerText += JSON.stringify(d);
                     });
                 }
                 document.getElementById("fooba").innerText = JSON.stringify(data);
@@ -104,6 +109,6 @@
 
 
 <span id="fooba"></span>
-
+<div id="xx"></div>
 </body>
 </html>
