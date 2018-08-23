@@ -12,12 +12,15 @@ $app->get("/dashboard", function (Request $request, Response $response, array $a
 
 $app->get("/concept", function (Request $request, Response $response, array $args) {
 
-    $key = "AIzaSyB9vGT8ZLx2xlJ_pcZmXqRoO2lGcGd25DU";
-    $cxv = "%20007681948213644044031:tswqn5l0jju";
-    $json = file_get_contents("https://www.googleapis.com/customsearch/v1?tbs=itp:clipart&safe=off&source=lnms&tbm=isch&sa=X&searchtype=image&key=$key&cx=$cxv&q=" . $request->getParam('w'));
-    return $response->withJson(array_map(function ($v) {
-	return $v->pagemap->imageobject[0]->url;
-    }, json_decode($json)->items));
+    $q = $request->getParam('w');
+    $url = "https://www.googleapis.com/customsearch/v1?key=AIzaSyB9vGT8ZLx2xlJ_pcZmXqRoO2lGcGd25DU&cx=007681948213644044031:tswqn5l0jju&q=$q&searchType=image&imgSize=icon";
+    $json = json_decode(file_get_contents($url));
+
+    $rst = array_map(function ($v) {
+        return $v->link;
+    }, $json->items);
+
+    return $response->withJson($rst);
 });
 
 
