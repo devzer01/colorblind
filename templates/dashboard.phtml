@@ -78,6 +78,11 @@
                 processData: false,
                 contentType: false
             }).done(function(data) {
+                for (var x =0; x < data.length; x++) {
+                    $.get("/concept?w=" + data[x], function (d) {
+                        document.getElementById("fooba").innerText += JSON.stringify(d);
+                    });
+                }
                 document.getElementById("fooba").innerText = JSON.stringify(data);
             });
 

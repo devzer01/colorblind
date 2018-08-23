@@ -3,7 +3,8 @@
     "require": {
         "slim/slim-skeleton": "^3.1",
         "relaxedws/couchdb": "^1.0",
-        "google/cloud-speech": "^0.16.1"
+        "google/cloud-speech": "^0.16.1",
+        "google/apiclient": "^2.2"
     },
     "authors": [
         {
