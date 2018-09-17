@@ -240,8 +240,8 @@
         if (currentUser === null || currentUser === undefined) {
             firebase.auth().signInAnonymously().catch(function (error) {
                 // Handle Errors here.
-                var errorCode = error.code;
-                var errorMessage = error.message;
+            //    var errorCode = error.code;
+            //    var errorMessage = error.message;
                 // ...
             });
             authUiReset();
@@ -252,6 +252,15 @@
         $(".age").click(setAgeGroup);
         checkCookie();
     });
+</script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-46942077-10"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-46942077-10');
 </script>
 </body>
 </html>
