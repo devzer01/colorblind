@@ -1,266 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, minimal-ui" />
-    <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <meta charset="UTF-8">
-    <link type="text/css" rel="stylesheet" href="//cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.css" />
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script src="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
-    <script src="//www.gstatic.com/firebasejs/5.4.0/firebase-app.js"></script>
-    <script src="//www.gstatic.com/firebasejs/5.4.0/firebase-auth.js"></script>
-    <script src="//cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.js"></script>
-    <script type="text/javascript" src="/js/entrance.js"></script>
-    <title>::cognetic.io::</title>
-    <style>
-        body {
-            background-color: #f5e9db;
-        }
+<html>
+    <head>
+        <title>COGNETIC.IO</title>
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                background-color: black;
+                color: white;
+                font-size: 132px;
+                font-weight: 700;
+                width: 100%;
+                text-align:center;
+                line-height: 132px;
+            }
 
-        button {
-            width: 45%;
-            background-color: aqua;
-            margin: auto;
-        }
+            .links {
+                font-size: 60px;
+            }
 
-
-        h1 {
-            font-size: 4em !important;
-        }
-
-        #scoreCard, #countRemain {
-            font-size: 100px;
-            line-height: 100px;it would be something u will
-        }
-
-        .age {
-            margin: 5px;
-        }
-
-        .overlay {
-            position: absolute;
-            background-color: whitesmoke;
-            z-index: 1;
-            opacity: 0.93;
-            width: 100%;
-            height: 100%;
-        }
-
-        .content-area {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            width: 85%;
-            transform: translate(-50%, 30%);
-            z-index: 2;
-        }
-
-        .content-area2 {
-            position: absolute;
-            top: 70%;
-            left: 50%;
-            width: 80%;
-            transform: translate(-50%,-20%);it would be something u will
-            z-index: 2;
-        }
-
-        .content-area h2 {
-            font-size: 50px;
-        }
-
-        .content-area button {
-            z-index: 2;
-        }
-
-        #correct {
-            font-size: 100px;
-        }
-
-        .col-sm-12 {
-            /*width: 50%;*/
-            /*margin: auto;*/
-            /*vertical-align: middle;*/
-            /*height: 4em;*/
-            /*border: black 1px solid;*/
-            /*border-radius: 10px;*/
-            /*font-size: 3em;*/
-            background-color: white;
-        }
-
-        .bottom {
-            display: block;
-            max-width: 100%;
-            width: 100%;
-            position: absolute;
-            bottom:20px;
-            left:50%;
-            transform:translateX(-50%);
-            z-index: 0;
-        }
-
-        .bottom2 {
-            /*display: block;*/
-            /*max-width: 100%;*/
-            /*width: 100%;*/
-            /*position: absolute;*/
-            /*bottom: 0;*/
-            /*left:50%;*/
-            /*transform:translateX(-50%);*/
-            /*z-index: 0;*/
-
-            display: inline-flex;
-            max-width: 100%;
-            width: 100%;
-            position: fixed;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 2;
-            /* height: 10%; */
-            vertical-align: bottom;
-            margin-bottom: 0px;
-            padding-bottom: 0px;
-        }
-        /*span {*/
-        /*margin: auto;*/
-        /*top: 5em;*/
-        /*font-size: 1em;*/
-        /*position: absolute;*/
-        /*width: 50%;*/
-        /*height: auto;*/
-        /*}*/
-        .lst {
-            display: none;
-        }
-
-        .firebaseui-card-content {
-            height: 500px;
-        }
-
-        .blue { color: blue; }
-        .green { color: green; }
-        .yellow { color: yellow; }
-        .red { color: red; }
-        .black { color: black; }
-
-        .bgblue { background-color: white; }
-        .bggreen { background-color: white; }
-        .bgyellow { background-color: white; }
-        .bgred { background-color: white; }
-        .bgblack { background-color: white; }
-
-        #divNumber {
-            background-image: url(/images/celebrate.png);
-            background-repeat-y: no-repeat;
-            background-blend-mode: darken;
-        }
-
-        .pulse {
-            background-color: black;
-        }
-
-    </style>
-
-
-
-</head>
-
-<body>
-<div id="ageGroups" class="overlay text-center" style="padding-top: 30px; top: 0;">
-    <h2 class="h2">Reality Check</h2>
-    <img src="/images/logo-sm.png" />
-    <div class="content-area2">
-        <h5 class="h5">Please select your age group.</h5>
-        <button data-group="g13" class="btn btn-primary age">below 13</button>
-        <button data-group="g1317" class="btn btn-primary age">13 - 17</button>
-        <button data-group="g1830" class="btn btn-primary age">18 - 30</button>
-        <button data-group="g3145" class="btn btn-primary age">31 - 45</button>
-        <button data-group="g4665" class="btn btn-primary age">46 - 65</button>
-        <button data-group="g66" class="btn btn-primary age">66+</button>
-    </div>
-</div>
-<div id="divCounter" class="overlay text-center" style="display: none; padding-top: 30px; top: 0;">
-    <div class="content-area">
-        <h4 class="h4">Match word on top box to Color on bottom</h4>
-        <div id="countRemain"></div>
-    </div>
-</div>
-<div id="divNumber" class="overlay text-center" style="display: none; padding-top: 20px; top: 0;">
-    <div class="content-area">
-        <h2 class="h2 text-center col-sm-12" style="font-size: 50px; color: green;background-color: transparent;">GOAL</h2>
-        <div id="scoreCard">100</div>
-        <div id="remark" style="font-size: 12px;"> (see below for in-depth details)</div>
-        <hr/>
-    </div>
-    <div id="firebaseui-auth-container" class="content-area" style="transform: translate(-50%, 0%); bottom: -20%; z-index: 2; top: 45%;">
-        <h3 class="h3 text-center">Free membership!</h3>
-        <br/>
-    </div>
-    <div class="bottom2 col-sm-12 text-center" style="font-size: 10px">GESIT - A Gems production. State of Cognition is a registered trademark of GESIT</div>
-</div>
-
-<div class="container" id="mainContainer">
-    <h6 class="h6" id="name"></h6>
-    <div class="col-sm-11 text-right" style="height: 100px; font-size: 36px; color: white;" id="game-seconds">90</div>
-
-    <div id="dvf" class="col-sm-6 col-md-12 text-center shadow-lg bg-white rounded">
-        <h1 class="h1" id="first"></h1>
-    </div>
-
-    <div class="col-sm-11">&nbsp;</div>
-
-    <div id="dvs" class="col-sm-6 col-md-12 text-center shadow-lg bg-white rounded">
-        <h1 id="second" class="h1"></h1>
-    </div>
-    <div class="col-sm-10 text-center" style="height: 110px"><span id="correct"></span></div>
-    <div id="dvBottom" class="bottom text-center" style="display: none">
-        <button class="btn btn-primary btn-lg shadow-lg rounded btno" id="no">No</button>
-        <button class="btn btn-primary btn-lg shadow-lg rounded btys" id="yes">Yes</button>
-    </div>
-</div>
-<audio id="adcorrect">
-    <source id="sound1" src="sounds/correct.mp3" type="audio/mpeg">
-</audio>
-<audio id="adbust">
-    <source id="sound2" src="sounds/bust.mp3" type="audio/mpeg">
-</audio>
-<audio id="adcountdown">
-    <source id="sound3" src="sounds/countdown.mp3" type="audio/mpeg">
-</audio>
-<audio id="adtick">
-    <source id="sound4" src="sounds/tick.mp3" type="audio/mpeg">
-</audio>
-<script type="application/javascript">
-    $(document).ready(function () {
-        initListeners();
-        firebase.initializeApp(config);
-        initAuth();
-        initDb();
-        currentUser = firebase.auth().currentUser;
-        if (currentUser === null || currentUser === undefined) {
-            firebase.auth().signInAnonymously().catch(function (error) {
-                // Handle Errors here.
-            //    var errorCode = error.code;
-            //    var errorMessage = error.message;
-                // ...
-            });
-            authUiReset();
-        } else {
-
-        }
-
-        $(".age").click(setAgeGroup);
-        checkCookie();
-    });
-</script>
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-46942077-10"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-46942077-10');
-</script>
-</body>
+            a:visited, a:hover, a:active, a {
+                color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <DIV class=links>[<a href="/vision">VISION</a>]</DIV>
+        <DIV class=links>[<a href="/memory">MEMORY</a>]</DIV>
+        <br/><br/>
+        <div>COGNETIC.IO</div>
+    </body>
 </html>
+>>>>>>> cognetic update

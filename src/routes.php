@@ -81,8 +81,19 @@ $app->get("/talk", function (Request $request, Response $response, array $args) 
     return $this->renderer->render($response, 'dashboard.phtml', []);
 });
 
+
+
 // Routes
-$app->get("/", function (Request $request, Response $response, array $args) {
+$app->get("/hr", function (Request $request, Response $response, array $args) {
+    return $this->renderer->render($response, 'hr.phtml', ['map' => json_encode([])]);
+});
+
+$app->get("/memory", function (Request $request, Response $response, array $args) {
+    return $this->renderer->render($response, 'memory/index.phtml', []);
+});
+
+// Routes
+$app->get("/vision", function (Request $request, Response $response, array $args) {
     $colors = [
         'en' => ["black", "red", "blue", "yellow"],
         'th' => ["ฟ้า", "เหลือง", "แดง", "ดำ"],
@@ -104,5 +115,9 @@ $app->get("/", function (Request $request, Response $response, array $args) {
         $response = $response->withAddedHeader($key, $val);
     }
 
-    return $this->renderer->render($response, 'index.phtml', ['map' => json_encode($color)]);
+    return $this->renderer->render($response, 'vision/index.phtml', ['map' => json_encode($color)]);
+});
+
+$app->get("/", function (Request $request, Response $response, array $args) {
+    return $this->renderer->render($response, 'index.phtml', []);
 });

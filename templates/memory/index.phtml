@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Short+Stack" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://cdn.rawgit.com/nnattawat/flip/master/dist/jquery.flip.min.js"></script>
+    <style>
+        body {
+            background-image: url(/images/memory/bg-light.png);
+            font-family: 'Short Stack', cursive;
+        }
+        .heading_h1 {
+            width: 100%;
+            text-align: center;
+            font-size: 150px;
+            letter-spacing: 15px;
+            color: white;
+            margin: 0 0;
+        }
+        .heading_h6 {
+                    width: 100%;
+                    text-align: center;
+                    font-size: 50px;
+                    color: white;
+                    margin: 0 0;
+                }
+        .slot_div {
+            height: 167px;
+            width: 171px;
+        }
+
+        .slot_div_2x {
+            height: 334px;
+            width: 342px;
+            line-height: 334px;
+            text-align: center;
+            font-size: 75px;
+            display: inline-block;
+        }
+
+        .slot_div_blue {
+            background-image: url(/images/memory/slot.blue.png);
+        }
+
+        .slot_div_blue_2x {
+            background-image: url(/images/memory/slot.blue.2x.png);
+        }
+
+        hr {
+            height: 100px;
+            border: none;
+        }
+        .container {
+            width: 100%;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1 class=heading_h1>MEMORY</h1>
+    <h6 class=heading_h6>building blocks of knowledge</h6>
+    <hr />
+    <div class=container>
+        <div id="about" class="slot_div_2x">
+            <div class="slot_div_blue_2x slot_div_2x front">ABOUT</div>
+            <div class="slot_div_blue_2x slot_div_2x back">WHO</div>
+        </div>
+        <div id="play" class="slot_div_2x">
+            <div class="slot_div_blue_2x slot_div_2x front">PLAY</div>
+            <div class="slot_div_blue_2x slot_div_2x back">STORE</div>
+        </div>
+    </div>
+
+    <script type='text/javascript'>
+        $(document).ready(function() {
+            $("#about").flip();
+            $("#play").flip();
+        });
+    </script>
+</body>
+</html>
