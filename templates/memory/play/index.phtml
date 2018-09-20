@@ -7,6 +7,7 @@
     <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.css" />
     <script type="text/javascript">
 
+    var is_logged = false;
 
       initApp = function() {
         firebase.auth().onAuthStateChanged(function(user) {
@@ -34,6 +35,7 @@
               }, null, '  ');
               document.getElementById("game").style.display = "";
               document.getElementById("signin").style.display = "none";
+              is_logged = true;
             });
           } else {
             // User is signed out.
@@ -230,8 +232,10 @@
             game.board(game.deck(true));
             $(game).on("winning", gameOutcome.bind(null, 1));
             $(game).on("timeout", gameOutcome.bind(null, 0));
-            game.draw_game(document.getElementById('game'));
-            game.start(document.getElementById("clock"), document.getElementById("score"));
+            if (is_logged) {
+                game.draw_game(document.getElementById('game'));
+                game.start(document.getElementById("clock"), document.getElementById("score"));
+                }
 
         function gameOutcome(outcone, elm, score) {
             if (outcone === 0) {
