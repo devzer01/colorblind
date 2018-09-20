@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="//fonts.googleapis.com/css?family=Short+Stack" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/5.4.1/firebase.js"></script>
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.css" />
+    <script type="text/javascript">
+
+
+      initApp = function() {
+        firebase.auth().onAuthStateChanged(function(user) {
+          if (user) {
+            // User is signed in.
+            var displayName = user.displayName;
+            var email = user.email;
+            var emailVerified = user.emailVerified;
+            var photoURL = user.photoURL;
+            var uid = user.uid;
+            var phoneNumber = user.phoneNumber;
+            var providerData = user.providerData;
+            user.getIdToken().then(function(accessToken) {
+              document.getElementById('sign-in-status').textContent = 'Signed in';
+              document.getElementById('sign-in').textContent = 'Sign out';
+              document.getElementById('account-details').textContent = JSON.stringify({
+                displayName: displayName,
+                email: email,
+                emailVerified: emailVerified,
+                phoneNumber: phoneNumber,
+                photoURL: photoURL,
+                uid: uid,
+                accessToken: accessToken,
+                providerData: providerData
+              }, null, '  ');
+              document.getElementById("game").style.display = "";
+              document.getElementById("signin").style.display = "none";
+            });
+          } else {
+            // User is signed out.
+            document.getElementById("game").style.display = "none";
+            document.getElementById("signin").style.display = "";
+            document.getElementById('sign-in-status').textContent = 'Signed out';
+            document.getElementById('sign-in').textContent = 'Sign in';
+            document.getElementById('account-details').textContent = 'null';
+          }
+        }, function(error) {
+          console.log(error);
+        });
+      };
+
+      window.addEventListener('load', function() {
+        initApp()
+      });
+
+
+          var config = {
+            apiKey: "AIzaSyDe_0YM-Vc0h_B54g4C8BFe49CT2blkn4w",
+            authDomain: "cognetic-memory.firebaseapp.com",
+            databaseURL: "https://cognetic-memory.firebaseio.com",
+            projectId: "cognetic-memory",
+            storageBucket: "cognetic-memory.appspot.com",
+            messagingSenderId: "45230716961"
+          };
+          firebase.initializeApp(config);
+          var ui = new firebaseui.auth.AuthUI(firebase.auth());
+
+          var uiConfig = {
+  callbacks: {
+    signInSuccessWithAuthResult: function(authResult, redirectUrl) {
+      return true;
+    },
+    uiShown: function() {
+      // The widget is rendered.
+      // Hide the loader.
+      document.getElementById('loader').style.display = 'none';
+    }
+  },
+  // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
+  signInFlow: 'popup',
+  signInSuccessUrl: 'http://localhost:9040/memory/play',
+  signInOptions: [
+    // Leave the lines as is for the providers you want to offer your users.
+    firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+    firebase.auth.FacebookAuthProvider.PROVIDER_ID
+  ],
+  // Terms of service url.
+  tosUrl: 'https://cognetic.io/tos.html',
+  // Privacy policy url.
+  privacyPolicyUrl: 'https://cognetic.io/privacy.html'
+};
+
+          ui.start('#firebaseui-auth-container', uiConfig);
+
+    </script>
+
+    <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="//cdn.rawgit.com/nnattawat/flip/master/dist/jquery.flip.min.js"></script>
+    <script src="/js/memory/index.js"></script>
+
+    <style>
+        body {
+            background-image: url(/images/memory/bg-light.png);
+            font-family: 'Short Stack', cursive;
+        }
+        .heading_h1 {
+            width: 100%;
+            text-align: center;
+            font-size: 90px;
+            letter-spacing: 15px;
+            color: white;
+            margin: 0 0;
+        }
+        .heading_h6 {
+                    width: 100%;
+                    text-align: center;
+                    font-size: 50px;
+                    color: white;
+                    margin: 0 0;
+                }
+        .slot_div {
+            height: 167px;
+            width: 171px;
+            line-height: 167px;
+            text-align: center;
+            font-size: 75px;
+            display: inline-block;
+        }
+
+        .slot_div_1y {
+            height: 167px;
+            width: 171px;
+            display: inline-block;
+        }
+
+        .slot_div_y {
+            height: 334px;
+            width: 342px;
+            display: inline-block;
+        }
+
+        .slot_div_2x {
+            height: 334px;
+            width: 342px;
+            line-height: 334px;
+            text-align: center;
+            font-size: 75px;
+            display: inline-block;
+        }
+
+        .back {
+            padding-top: 10px;
+            background-repeat-y: no-repeat;
+        }
+
+        img {
+
+        }
+
+        .slot_div_blue {
+            background-image: url(/images/memory/slot.blue.png);
+        }
+
+        .slot_div_blue_2x {
+            background-image: url(/images/memory/slot.blue.2x.png);
+        }
+
+        .slot_div_green_2x {
+            background-image: url(/images/memory/slot.green.2x.png);
+        }
+
+        hr {
+            height: 100px;
+            border: none;
+        }
+        .container {
+            width: 100%;
+            text-align: center;
+            clear: both;
+        }
+
+        #clock, #score, #total_score {
+            font-size: 50px;
+            color: white;
+            padding-right: 50px;
+            padding-top: 50px;
+            text-align: center;
+            display: inline-block;
+        }
+
+        #score {
+            color: #02bd7e;
+        }
+
+        #total_score {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="clock"></div>
+        <div id="score"></div>
+        <div id="total_score"></div>
+    </div>
+
+    <div id="game">
+
+    </div>
+    <div class=container id="signin">
+        <div class="heading_h1">Sign in to play</div>
+        <div id="firebaseui-auth-container"></div>
+        <div id="loader">Loading...</div>
+
+        <div id="sign-in-status"></div>
+        <div id="sign-in"></div>
+        <div id="account-details"></div>
+    </div>
+    <script type='text/javascript'>
+
+
+
+    $(document).ready(function() {
+
+        let cards = 3;
+        let rows = 2;
+        let cols = 3;
+        let total_score = 0;
+
+        let game = new Game(22, cards, rows, cols);
+            game.board(game.deck(true));
+            $(game).on("winning", gameOutcome.bind(null, 1));
+            $(game).on("timeout", gameOutcome.bind(null, 0));
+            game.draw_game(document.getElementById('game'));
+            game.start(document.getElementById("clock"), document.getElementById("score"));
+
+        function gameOutcome(outcone, elm, score) {
+            if (outcone === 0) {
+                game.reset(false);
+            } else {
+                total_score += parseInt(score);
+                document.getElementById("total_score").innerText = "" + total_score;
+                game.reset(true);
+                }
+            game.board(game.deck(true));
+            game.draw_game(document.getElementById('game'));
+            game.start(document.getElementById("clock"), document.getElementById("score"));
+        }
+    });
+</script>
+</body>
+</html>

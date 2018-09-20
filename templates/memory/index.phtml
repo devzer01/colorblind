@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link href="https://fonts.googleapis.com/css?family=Short+Stack" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-    <script src="https://cdn.rawgit.com/nnattawat/flip/master/dist/jquery.flip.min.js"></script>
+    <link href="//fonts.googleapis.com/css?family=Short+Stack" rel="stylesheet">
+    <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="//cdn.rawgit.com/nnattawat/flip/master/dist/jquery.flip.min.js"></script>
     <style>
         body {
             background-image: url(/images/memory/bg-light.png);
@@ -46,6 +46,10 @@
             background-image: url(/images/memory/slot.blue.2x.png);
         }
 
+        .slot_div_green_2x {
+            background-image: url(/images/memory/slot.green.2x.png);
+        }
+
         hr {
             height: 100px;
             border: none;
@@ -62,18 +66,22 @@
     <hr />
     <div class=container>
         <div id="about" class="slot_div_2x">
-            <div class="slot_div_blue_2x slot_div_2x front">ABOUT</div>
-            <div class="slot_div_blue_2x slot_div_2x back">WHO</div>
+            <div class="slot_div_blue_2x slot_div_2x front">CRICKET</div>
+            <div class="slot_div_blue_2x slot_div_2x back">WAIT.</div>
         </div>
         <div id="play" class="slot_div_2x">
-            <div class="slot_div_blue_2x slot_div_2x front">PLAY</div>
-            <div class="slot_div_blue_2x slot_div_2x back">STORE</div>
+            <div class="slot_div_blue_2x slot_div_2x front">SOCCER</div>
+            <div class="slot_div_blue_2x slot_div_2x back">WAIT</div>
         </div>
     </div>
-
+    <a href="https://play.google.com/apps/?id=io.cognetic.memory"><img src="https://anonymster.com/wp-content/uploads/2017/05/google-play-store-logo.png"/></a>
     <script type='text/javascript'>
         $(document).ready(function() {
-            $("#about").flip();
+            $("#about").flip({}).on('flip:done', function(e) {
+               location.href = "/memory/play";
+               return;
+            });
+
             $("#play").flip();
         });
     </script>

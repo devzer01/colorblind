@@ -118,6 +118,10 @@ $app->get("/vision", function (Request $request, Response $response, array $args
     return $this->renderer->render($response, 'vision/index.phtml', ['map' => json_encode($color)]);
 });
 
+$app->get("/memory/play", function (Request $request, Response $response, array $args) {
+    return $this->renderer->render($response, 'memory/play/index.phtml', []);
+});
+
 $app->get("/", function (Request $request, Response $response, array $args) {
     return $this->renderer->render($response, 'index.phtml', []);
 });
