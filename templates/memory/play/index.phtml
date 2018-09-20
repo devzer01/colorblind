@@ -7,7 +7,30 @@
     <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.css" />
     <script type="text/javascript">
 
-    var is_logged = false;
+    var game = null;
+
+        let cards = 3;
+        let rows = 2;
+        let cols = 3;
+        let total_score = 0;
+
+        game = new Game(22, cards, rows, cols);
+            game.board(game.deck(true));
+            $(game).on("winning", gameOutcome.bind(null, 1));
+            $(game).on("timeout", gameOutcome.bind(null, 0));
+
+        function gameOutcome(outcome, elm, score) {
+            if (outcome === 0) {
+                game.reset(false);
+            } else {
+                total_score += parseInt(score);
+                document.getElementById("total_score").innerText = "" + total_score;
+                game.reset(true);
+                }
+            game.board(game.deck(true));
+            game.draw_game(document.getElementById('game'));
+            game.start(document.getElementById("clock"), document.getElementById("score"));
+        }
 
       initApp = function() {
         firebase.auth().onAuthStateChanged(function(user) {
@@ -33,9 +56,10 @@
                 accessToken: accessToken,
                 providerData: providerData
               }, null, '  ');
-              document.getElementById("game").style.display = "";
-              document.getElementById("signin").style.display = "none";
-              is_logged = true;
+                document.getElementById("game").style.display = "";
+                document.getElementById("signin").style.display = "none";
+                game.draw_game(document.getElementById('game'));
+                game.start(document.getElementById("clock"), document.getElementById("score"));
             });
           } else {
             // User is signed out.
@@ -219,36 +243,17 @@
     </div>
     <script type='text/javascript'>
 
-
+    var ints;
 
     $(document).ready(function() {
 
-        let cards = 3;
-        let rows = 2;
-        let cols = 3;
-        let total_score = 0;
 
-        let game = new Game(22, cards, rows, cols);
-            game.board(game.deck(true));
-            $(game).on("winning", gameOutcome.bind(null, 1));
-            $(game).on("timeout", gameOutcome.bind(null, 0));
-            if (is_logged) {
-                game.draw_game(document.getElementById('game'));
-                game.start(document.getElementById("clock"), document.getElementById("score"));
-                }
 
-        function gameOutcome(outcone, elm, score) {
-            if (outcone === 0) {
-                game.reset(false);
-            } else {
-                total_score += parseInt(score);
-                document.getElementById("total_score").innerText = "" + total_score;
-                game.reset(true);
-                }
-            game.board(game.deck(true));
-            game.draw_game(document.getElementById('game'));
-            game.start(document.getElementById("clock"), document.getElementById("score"));
-        }
+
+
+
+
+
     });
 </script>
 </body>
