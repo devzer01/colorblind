@@ -32,10 +32,12 @@
         .slot_div_2x {
             height: 334px;
             width: 342px;
-            line-height: 334px;
+            line-height: 70px;
             text-align: center;
-            font-size: 75px;
+            font-size: 55px;
+            PADDING-top: 30px;
             display: inline-block;
+            background-repeat-y: no-repeat;
         }
 
         .slot_div_blue {
@@ -58,31 +60,34 @@
             width: 100%;
             text-align: center;
         }
+
+        .front {
+        color: #FFFFFF;
+        }
+
+        img {
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
     <h1 class=heading_h1>MEMORY</h1>
     <h6 class=heading_h6>building blocks of knowledge</h6>
-    <hr />
+
+
     <div class=container>
         <div id="about" class="slot_div_2x">
-            <div class="slot_div_blue_2x slot_div_2x front">CRICKET</div>
-            <div class="slot_div_blue_2x slot_div_2x back">WAIT.</div>
+            <div class="slot_div_blue_2x slot_div_2x front">CLICK <BR/>HERE TO <BR/>PLAY ONLINE</div>
+            <div class="slot_div_blue_2x slot_div_2x back">ONLINE</div>
         </div>
-        <div id="play" class="slot_div_2x">
-            <div class="slot_div_blue_2x slot_div_2x front">SOCCER</div>
-            <div class="slot_div_blue_2x slot_div_2x back">WAIT</div>
-        </div>
+        <div style="float: left"><a href="https://play.google.com/apps/?id=io.cognetic.memory"><img src="https://anonymster.com/wp-content/uploads/2017/05/google-play-store-logo.png"/></a></div>
     </div>
-    <a href="https://play.google.com/apps/?id=io.cognetic.memory"><img src="https://anonymster.com/wp-content/uploads/2017/05/google-play-store-logo.png"/></a>
     <script type='text/javascript'>
         $(document).ready(function() {
             $("#about").flip({}).on('flip:done', function(e) {
                location.href = "/memory/play";
                return;
             });
-
-            $("#play").flip();
         });
     </script>
 </body>
