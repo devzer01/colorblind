@@ -4,6 +4,25 @@
     <link href="//fonts.googleapis.com/css?family=Short+Stack" rel="stylesheet">
     <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
     <script src="//cdn.rawgit.com/nnattawat/flip/master/dist/jquery.flip.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyDe_0YM-Vc0h_B54g4C8BFe49CT2blkn4w",
+        authDomain: "cognetic-memory.firebaseapp.com",
+        databaseURL: "https://cognetic-memory.firebaseio.com",
+        projectId: "cognetic-memory",
+        storageBucket: "cognetic-memory.appspot.com",
+        messagingSenderId: "45230716961"
+      };
+      firebase.initializeApp(config);
+    </script>
+    <!-- Add additional services that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-messaging.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-functions.js"></script>
     <style>
         body {
             background-image: url(/images/memory/bg-light.png);
